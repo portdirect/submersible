@@ -1,0 +1,13 @@
+#!/bin/bash
+set -xe
+
+: ${KUBERNETES_PORT_443_TCP_ADDR:="10.96.0.1"}
+: ${KUBERNETES_PORT_443_TCP_PORT:="443"}
+
+sleep 1
+
+if ! [ "$(echo $(hostname) | awk -F "_" '{ print $4 }')" == "kube-system" ]; then
+  nc -v -z -w1 ${KUBERNETES_PORT_443_TCP_ADDR} ${KUBERNETES_PORT_443_TCP_PORT}
+fi
+
+exec tail -f /dev/null
